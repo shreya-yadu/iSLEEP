@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<title>iSleep</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+
+
+var dps = []; // dataPoints
+var chart = new CanvasJS.Chart("chartContainer", {
+	title :{
+		text: "Current Sleeping Patterns"
+	},
+	axisY: {
+		includeZero: false
+	},      
+	data: [{
+		type: "pie",
+		dataPoints: dps
+	}]
+});
+
+var xVal = 0;
+var yVal = 100; 
+var updateInterval = 1000;
+var dataLength = 2; // number of dataPoints visible at any point
+ 
+var updateChart = function (count) {
+
+	count = count || 1;
+
+	for (var j = 0; j < count; j++) {
+		
+
+		var yVal = parseInt($.ajax({
+        url: "test.php",
+        async: false
+          }).responseText);
+
+		//var yVal = 0;
+		//if(j==0){
+		//yVal = parseInt($.ajax({
+        //url: "test2.php",
+        //async: false
+        //  }).responseText);
+		//}
+		//else if(j==1){
+		//yVal = parseInt($.ajax({
+        //url: "test.php",
+        //async: false
+        //  }).responseText);
+		//}	
+
+		dps.push({
+			x: xVal,
+			y: yVal
+		});
+		xVal++;
+	}
+
+	if (dps.length > dataLength) {
+		dps.shift();
+	}
+
+	chart.render();
+};
+
+updateChart(dataLength);
+setInterval(function(){updateChart()}, updateInterval);
+
+}
+</script>
+</head>
+
+
+<style>
+body {font-family: "Lato", sans-serif}
+.mySlides {display: none}
+</style>
+<body>
+
+<!-- Navbar -->
+<div class="w3-top">
+  <div class="w3-bar w3-black w3-card">
+    
+    <a href="Homepage.html" class="w3-bar-item w3-button w3-padding-large">HOME</a>
+    <a href="graph1.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Graph 1</a>
+    <a href="graph2.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Graph 2</a>
+    <a href="graph3.html" class="w3-bar-item w3-button w3-padding-large w3-hide-small">Graph 3</a>
+    
+   
+</div>
+
+<div class="w3-content" style="max-width:2000px;margin-top:46px">
+<!-- The Band Section -->
+  <div class="w3-container w3-content w3-center w3-padding-64" style="max-width:800px" id="band">
+  
+    	<div id="chartContainer" style="height: 400px; width: 100%;"></div>
+		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+      </div>
+    </div>
+  </div>
+  </div>
+ 
+</div>
+</body>
+</html>
+
